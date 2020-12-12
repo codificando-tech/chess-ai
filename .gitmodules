@@ -1,0 +1,3 @@
+[submodule "chess-js"]
+	path = chess-js
+	url = git@github.com:lucaomartins/chess-js.git
