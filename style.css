@@ -1,0 +1,26 @@
+body {
+    margin: 0px;
+    overflow: hidden;
+}
+.container {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    text-align: center;
+    font-size: 3rem;
+}
+#chess-board {
+    padding: 20px;
+    margin: 0px;
+}
+.game {
+    border: 5px solid rgb(0, 0, 0);
+}
+
+.title {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}

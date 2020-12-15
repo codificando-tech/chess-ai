@@ -181,6 +181,7 @@ class King extends Piece {
     constructor(x, y, team, board) {
         super(x, y, team, board);
         this.isInCheck = false;
+        this.value = 800;
         switch(team) {
             case TEAM.WHITE:
                 this.sprite = spriteMapper["white_king"]
@@ -249,6 +250,7 @@ class King extends Piece {
 class Queen extends Piece {
     constructor(x, y, team, board) {
         super(x, y, team, board);
+        this.value = 9;
         switch(team) {
             case TEAM.WHITE:
                 this.sprite = spriteMapper["white_queen"]
@@ -286,6 +288,7 @@ class Queen extends Piece {
 class Rook extends Piece {
     constructor(x, y, team, board) {
         super(x, y, team, board);
+        this.value = 5;
         switch(team) {
             case TEAM.WHITE:
                 this.sprite = spriteMapper["white_rook"]
@@ -309,6 +312,7 @@ class Rook extends Piece {
 class Bishop extends Piece {
     constructor(x, y, team, board) {
         super(x, y, team, board);
+        this.value = 3;
         switch(team) {
             case TEAM.WHITE:
                 this.sprite = spriteMapper["white_bishop"];
@@ -333,6 +337,7 @@ class Bishop extends Piece {
 class Knight extends Piece {
     constructor(x, y, team, board) {
         super(x, y, team, board);
+        this.value = 3;
         this.canJump = true;
         switch(team) {
             case TEAM.WHITE:
@@ -358,6 +363,7 @@ class Knight extends Piece {
 class Pawn extends Piece {
     constructor(x, y, team, board) {
         super(x, y, team, board);
+        this.value = 1;
         
         this.enPassant = false;
         this.countMovements = 0;

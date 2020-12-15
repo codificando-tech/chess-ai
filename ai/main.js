@@ -9,43 +9,35 @@ function ia() {
 }
 
 function handleBoard(board) {
-    let virtualBoard = new Board();
     let boardData = new BoardData();
     boardData.mapperBoard(board);
     boardData = boardData.clone();
-    boardData.mapperToBoard(virtualBoard);
     board.turn = null;
-    let moves = generateMoves(virtualBoard, aiColor);
-
+    let bestBoardData = minFun(boardData, 4);
     board.turn = aiColor;
+    board.getPieceAt(bestBoardData.lastMove.origin.x, bestBoardData.lastMove.origin.y).move(bestBoardData.lastMove.destination.x, bestBoardData.lastMove.destination.y, board)
 }
 
 function generateMoves(board, team) {
     return board.pieces[team].map(piece => {return {origin: piece.matrixPosition, destinations: piece.generateMoves(board)}})
 }
 
-function movePiece(origin, destination, board) {
-    let piece = board.getPieceAt(origin.x, origin.y);
 
-    if (board.isPieceAt(destination.x, destination.y)) {
-        let enemyPiece = board.getPieceAt(destination.x, destination.y);
-        if (piece.isEnemy(piece)) {
-            enemyPiece.die();
-        }
-    }
-    piece.matrixPosition = createVector(destination.x, destination.y);
-    piece.firstMovement = false;
-    board.pass();
-}
-
-function moveAndScore(moves, boardData) {
+function generateBoardsData(boardData) {
+    let newBoardData;
+    let boardsData = [];
     let virtualBoard = new Board();
     boardData.mapperToBoard(virtualBoard);
 
+    let moves = generateMoves(virtualBoard, virtualBoard.turn);
+
     moves.forEach(piece => {
         piece.destinations.forEach(destination => {
-            boardData.mapperToBoard(virtualBoard);
-            movePiece(piece.origin, destination, board);
-        })
+            newBoardData = boardData.clone();
+            newBoardData.mapperToBoard(virtualBoard);
+            newBoardData.movePiece(piece.origin, destination, virtualBoard);
+            boardsData.push(newBoardData);
+        });
     });
+    return boardsData;
 }
