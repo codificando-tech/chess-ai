@@ -47,7 +47,6 @@ class BoardData {
         }
         piece.matrixPosition = createVector(destination.x, destination.y);
         piece.firstMovement = false;
-        board.turn = board.getEnemyTeam(board.turn);
         this.lastMove = {origin: origin, destination: destination};
     }
 

@@ -13,7 +13,7 @@ function handleBoard(board) {
     boardData.mapperBoard(board);
     boardData = boardData.clone();
     board.turn = null;
-    let bestBoardData = minFun(boardData, 4);
+    let bestBoardData = minFun(boardData, 3);
     board.turn = aiColor;
     board.getPieceAt(bestBoardData.lastMove.origin.x, bestBoardData.lastMove.origin.y).move(bestBoardData.lastMove.destination.x, bestBoardData.lastMove.destination.y, board)
 }
@@ -29,15 +29,22 @@ function generateBoardsData(boardData) {
     let virtualBoard = new Board();
     boardData.mapperToBoard(virtualBoard);
 
-    let moves = generateMoves(virtualBoard, virtualBoard.turn);
+    let moves = generateMoves(virtualBoard, boardData.turn);
 
     moves.forEach(piece => {
         piece.destinations.forEach(destination => {
             newBoardData = boardData.clone();
             newBoardData.mapperToBoard(virtualBoard);
             newBoardData.movePiece(piece.origin, destination, virtualBoard);
+            newBoardData.turn = virtualBoard.getEnemyTeam(newBoardData.turn);
             boardsData.push(newBoardData);
         });
     });
+    if (boardsData.length == 0) {
+        checkMateBoard = boardData.clone();
+        checkMateBoard.mapperToBoard(virtualBoard);
+        virtualBoard.getKing(checkMateBoard.turn).die();
+        return [checkMateBoard];
+    }
     return boardsData;
 }

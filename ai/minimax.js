@@ -13,9 +13,9 @@ function maxFun(boardData, depth) {
         if (boardDataEval.score > maxScore) {
             maxScore = boardDataEval.score;
             bestBoardData = boardsData[i];
+            bestBoardData.score = boardDataEval.score;
         }
     }
-    bestBoardData.setScore();
     return bestBoardData;
 }
 
@@ -34,8 +34,8 @@ function minFun(boardData, depth) {
         if (boardDataEval.score < minScore) {
             minScore = boardDataEval.score;
             bestBoardData = boardsData[i];
+            bestBoardData.score = boardDataEval.score;
         }
     }
-    bestBoardData.setScore();
     return bestBoardData;
 }
