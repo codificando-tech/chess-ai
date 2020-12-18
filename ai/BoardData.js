@@ -23,16 +23,27 @@ class BoardData {
 
     setScore() {
         let score = 0;
-        this.pieces[TEAM.WHITE].forEach(piece => {
-            if (piece.taken) {
-                score -= piece.value;
-            }
-        });
-        this.pieces[TEAM.BLACK].forEach(piece => {
-            if (piece.taken) {
-                score += piece.value;
-            }
-        });
+        let teamScore = {[TEAM.WHITE]: 0, [TEAM.BLACK]: 0};
+
+        Object.values(TEAM).forEach(team => {
+            this.pieces[team].forEach(piece => {
+                if (piece.taken) {
+                    teamScore[team] += piece.value;
+                }
+
+                if(piece instanceof King) {
+                    if (piece.didCastling) {
+                        teamScore[team] -= 5;
+                    } else if (piece.firstMovement == false) {
+                        teamScore[team] += 5;
+                    }
+                }
+            });
+        })
+
+        score -= teamScore[TEAM.WHITE];
+        score += teamScore[TEAM.BLACK];
+
         this.score = score;
     }
 

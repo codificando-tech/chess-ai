@@ -11,6 +11,8 @@
         <span class="title">♚ <strong>Chess Game</strong> ♔</span>
         <div id="chess-board"></div>
     </div>
+    <span>Depth Level: </span><span id="depth-level">3</span>
+    <input id="depth-level-input" type="range" value="3" min="1" max="10" step="1" onchange="document.getElementById('depth-level').innerText = this.value">
 </body>
 <script src="lib/p5.js"></script>
 <script src="lib/p5.dom.js"></script>

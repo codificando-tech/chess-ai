@@ -40,7 +40,7 @@ class Piece {
                 if (this.isEnemy(piece)) {
                     piece.die();
                     deathSound.setVolume(0.4);
-                    deathSound.play();
+                    // deathSound.play();
                 } else {
                     return;
                 }
@@ -48,7 +48,7 @@ class Piece {
             this.matrixPosition = createVector(x, y);
             this.pixelPosition = createVector(x * tileSize + tileSize / 2, y *tileSize + tileSize / 2);
             this.firstMovement = false;
-            moveSound.play();
+            // moveSound.play();
             board.pass();
         }
     }
@@ -76,7 +76,11 @@ class Piece {
 
     isNotSuicideMove(x, y, board) {
         let attackedPiece = board.getPieceAt(x, y);
-        attackedPiece.taken = true;
+        if (attackedPiece != null) {
+            attackedPiece.taken = true;
+        } else {
+            attackedPiece = {};
+        }
 
         let piecePosition = this.matrixPosition;
         this.matrixPosition = createVector(x, y);
@@ -85,41 +89,44 @@ class Piece {
 
         this.matrixPosition = piecePosition;
         attackedPiece.taken = false;
+
         return result;
     }
 
     kingInCheck(board) {
         let king = board.getKing(this.team);
-        return board.isInCheck(king);
+        return king.kingInCheck(board);
     }
 
     moveThroughPieces(x, y, board) {
         if (this.canJump) return false
 
-        var stepDirectionX = x - this.matrixPosition.x;
-        if (stepDirectionX > 0) {
-          stepDirectionX = 1;
+        let stepDirectionX = x - this.matrixPosition.x;
+        let stepDirectionY = y - this.matrixPosition.y;
+
+        if(stepDirectionX > 0) {
+            stepDirectionX = 1;
         } else if (stepDirectionX < 0) {
-          stepDirectionX = -1;
+            stepDirectionX = -1;
         }
-        var stepDirectionY = y - this.matrixPosition.y;
-        if (stepDirectionY > 0) {
-          stepDirectionY = 1;
+
+        if(stepDirectionY > 0) {
+            stepDirectionY = 1;
         } else if (stepDirectionY < 0) {
-          stepDirectionY = -1;
+            stepDirectionY = -1;
         }
-        var tempPos = createVector(this.matrixPosition.x, this.matrixPosition.y);
+
+        let tempPos = createVector(this.matrixPosition.x, this.matrixPosition.y)
         tempPos.x += stepDirectionX;
         tempPos.y += stepDirectionY;
-        while (tempPos.x != x || tempPos.y != y) {
-    
-          if (board.getPieceAt(tempPos.x, tempPos.y) != board.nullPiece) {
-            return true;
-          }
-          tempPos.x += stepDirectionX;
-          tempPos.y += stepDirectionY;
-        }
-    
+        while(!(tempPos.x == x && tempPos.y == y) && this.isInsideMatrix(tempPos.x, tempPos.y)) {          
+            if (board.getPieceAt(tempPos.x, tempPos.y) != null) {
+                return true;
+            }
+            tempPos.x += stepDirectionX;
+            tempPos.y += stepDirectionY;
+        } 
+        
         return false;
     }
 
@@ -144,7 +151,7 @@ class Piece {
     }
 
     isEnemy(piece) {
-        if(piece.team != null){
+        if(piece != null){
             return piece.team != this.team;
         }
         return false;
@@ -172,6 +179,8 @@ class Piece {
         clone.matrixPosition = this.matrixPosition;
         clone.team = this.team;
         clone.canJump = this.canJump;
+        clone.taken = this.taken;
+        clone.value = this.value;
         return clone;
     }
 
@@ -182,6 +191,7 @@ class King extends Piece {
         super(x, y, team, board);
         this.isInCheck = false;
         this.value = 800;
+        this.didCastling = false;
         switch(team) {
             case TEAM.WHITE:
                 this.sprite = spriteMapper["white_king"]
@@ -220,12 +230,15 @@ class King extends Piece {
                     break;
             }
             let rook = board.getPieceAt(rookPosition.x, rookPosition.y);
-            if(board.canDoCastling(this, rook)){
-                rook.move(newRookPosition.x, newRookPosition.y, board);
-                this.matrixPosition = createVector(x, y);
-                this.pixelPosition = createVector(x * tileSize + tileSize / 2, y *tileSize + tileSize / 2);
-                this.firstMovement = false;
-                moveSound.play();
+            if (rook != board.nullPiece) {
+                if(board.canDoCastling(this, rook)){
+                    rook.move(newRookPosition.x, newRookPosition.y, board);
+                    this.matrixPosition = createVector(x, y);
+                    this.pixelPosition = createVector(x * tileSize + tileSize / 2, y *tileSize + tileSize / 2);
+                    this.firstMovement = false;
+                    this.didCastling = true;
+                    // moveSound.play();
+                }
             }
         }
     }
@@ -238,6 +251,18 @@ class King extends Piece {
             }
         }
         return false
+    }
+
+
+    kingInCheck(board) {
+        let result = false;
+        board.pieces[board.getEnemyTeam(this.team)].forEach((piece) => {
+            if (!piece.taken && piece.canMove(this.matrixPosition.x, this.matrixPosition.y, board)) {
+                result = true;
+                return;
+            }
+        });
+        return result;
     }
 
     isKingSafeDistance(x, y, board) {
@@ -387,7 +412,7 @@ class Pawn extends Piece {
                 if (piece.team !== this.team) {
                     piece.die();
                     deathSound.setVolume(0.4)
-                    deathSound.play()
+                    // deathSound.play()
                 } else {
                     return;
                 }
@@ -409,7 +434,7 @@ class Pawn extends Piece {
             this.matrixPosition = createVector(x, y);
             this.pixelPosition = createVector(x * tileSize + tileSize / 2, y *tileSize + tileSize / 2);
             this.firstMovement = false;
-            moveSound.play();
+            // moveSound.play();
             if (this.countMovements >= 6) {
                 board.promotion(this, Queen);
             }
@@ -423,7 +448,6 @@ class Pawn extends Piece {
 
 
         let attacking = board.isEnemyPieceAt(x, y, this);
-        let enPassantAttacking = board.isEnemyPieceAt(x, y-pawnDirection, this);
         if (attacking) {
             if (this.diagonalMovement(x, y) && (y - this.matrixPosition.y) == pawnDirection) {
                 return super.canMove(x, y, board);

@@ -125,7 +125,7 @@ class Board {
         Object.values(TEAM).forEach(team => {
             let king = this.getKing(team);
             if(this.isInCheck(king)){
-                checkSound.play();
+                // checkSound.play();
                 king.isInCheck = true;
             } else {
                 king.isInCheck = false;
@@ -177,16 +177,20 @@ class Board {
     isPieceAt(x, y) {
         let pieceFound = false
         this.pieces[TEAM.WHITE].map(piece => {
-            if(piece.matrixPosition.x === x && piece.matrixPosition.y === y){pieceFound = true}
+            if(piece.matrixPosition.x === x && piece.matrixPosition.y === y && !piece.taken){pieceFound = true}
         })
         this.pieces[TEAM.BLACK].map(piece => {
-            if(piece.matrixPosition.x === x && piece.matrixPosition.y === y){pieceFound = true}
+            if(piece.matrixPosition.x === x && piece.matrixPosition.y === y && !piece.taken){pieceFound = true}
         })
         return pieceFound
     }
 
     isEnemyPieceAt(x, y, piece) {
-        return this.getPieceAt(x, y).team !== piece.team && this.getPieceAt(x, y).team !== null
+        if (this.isPieceAt(x, y)){
+            return this.getPieceAt(x, y).team !== piece.team
+        } else {
+            return false
+        }
     }
 
     getPieceAt(x, y) {
@@ -201,7 +205,7 @@ class Board {
             }
         }
         
-        return this.nullPiece;
+        return null;
     }
 
     getKing(team) {
