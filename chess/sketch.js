@@ -1,4 +1,4 @@
-let screenSize = window.innerHeight*0.8
+let screenSize = window.innerHeight*0.75
 let tileSize = (screenSize ) / 8
 
 let board

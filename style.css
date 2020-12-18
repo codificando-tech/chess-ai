@@ -1,6 +1,5 @@
 body {
     margin: 0px;
-    overflow: hidden;
 }
 .container {
     display: block;
@@ -8,7 +7,7 @@ body {
     margin-left: auto;
     width: 100%;
     text-align: center;
-    font-size: 3rem;
+
 }
 #chess-board {
     padding: 20px;
@@ -19,6 +18,7 @@ body {
 }
 
 .title {
+    font-size: 3rem;
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
