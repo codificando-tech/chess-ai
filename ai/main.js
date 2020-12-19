@@ -4,8 +4,8 @@ let aiColor = TEAM.BLACK;
 
 function ia() {
     if (board.turn == aiColor) {
+        setTimeout(handleBoard, 500, board);
     }
-    setTimeout(handleBoard, 500, board);
 }
 
 async function handleBoard(board) {
