@@ -154,9 +154,9 @@ class Board {
         }
     }
 
-    canDoCastling(king, rook) {
+    canDoCastling(king, rook, newRookPosition) {
         let canDoCastlingKing = !this.isInCheck(king) && king.firstMovement;
-        let canDoCastlingRook = rook.firstMovement;
+        let canDoCastlingRook = rook.firstMovement && rook.canMove(newRookPosition.x, newRookPosition.y, this);
         if(canDoCastlingKing && canDoCastlingRook && rook instanceof Rook){
             return true;
         }

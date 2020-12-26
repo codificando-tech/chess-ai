@@ -230,8 +230,8 @@ class King extends Piece {
                     break;
             }
             let rook = board.getPieceAt(rookPosition.x, rookPosition.y);
-            if (rook != board.nullPiece) {
-                if(board.canDoCastling(this, rook)){
+            if (rook != null) {
+                if(board.canDoCastling(this, rook, newRookPosition)){
                     rook.move(newRookPosition.x, newRookPosition.y, board);
                     this.matrixPosition = createVector(x, y);
                     this.pixelPosition = createVector(x * tileSize + tileSize / 2, y *tileSize + tileSize / 2);
@@ -376,10 +376,9 @@ class Knight extends Piece {
         }
     }
     canMove(x, y, board) {
-        if ((abs(x - this.matrixPosition.x) == 2 && abs(y - this.matrixPosition
-            .y) == 1) || (abs(x - this.matrixPosition.x) == 1 && abs(y - this.matrixPosition
-            .y) == 2)) {
-          return super.canMove(x, y, board);
+        if ((abs(x - this.matrixPosition.x) == 2 && abs(y - this.matrixPosition.y) == 1) ||
+        (abs(x - this.matrixPosition.x) == 1 && abs(y - this.matrixPosition.y) == 2)) {
+            return super.canMove(x, y, board);
         }
         return false;
     }
