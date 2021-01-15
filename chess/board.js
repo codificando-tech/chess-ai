@@ -28,6 +28,9 @@ class Board {
 
     setupPieces() {
         this.pieces[TEAM.BLACK].push(new King(4, 0, TEAM.BLACK, this));
+        for (var i = 0; i < 8; i++) {
+            this.pieces[TEAM.BLACK].push(new Pawn(i, 1, TEAM.BLACK, this));
+        }
         this.pieces[TEAM.BLACK].push(new Queen(3, 0, TEAM.BLACK, this));
         this.pieces[TEAM.BLACK].push(new Rook(0, 0, TEAM.BLACK, this));
         this.pieces[TEAM.BLACK].push(new Rook(7, 0, TEAM.BLACK, this));
@@ -35,11 +38,11 @@ class Board {
         this.pieces[TEAM.BLACK].push(new Knight(1, 0, TEAM.BLACK, this));
         this.pieces[TEAM.BLACK].push(new Bishop(2, 0, TEAM.BLACK, this));
         this.pieces[TEAM.BLACK].push(new Bishop(5, 0, TEAM.BLACK, this));
-        for (var i = 0; i < 8; i++) {
-            this.pieces[TEAM.BLACK].push(new Pawn(i, 1, TEAM.BLACK, this));
-        }
-
+        
         this.pieces[TEAM.WHITE].push(new King(4, 7, TEAM.WHITE, this));
+        for (var i = 0; i < 8; i++) {
+            this.pieces[TEAM.WHITE].push(new Pawn(i, 6, TEAM.WHITE, this));
+        }
         this.pieces[TEAM.WHITE].push(new Queen(3, 7, TEAM.WHITE, this));
         this.pieces[TEAM.WHITE].push(new Rook(0, 7, TEAM.WHITE, this));
         this.pieces[TEAM.WHITE].push(new Rook(7, 7, TEAM.WHITE, this));
@@ -47,9 +50,7 @@ class Board {
         this.pieces[TEAM.WHITE].push(new Knight(1, 7, TEAM.WHITE, this));
         this.pieces[TEAM.WHITE].push(new Bishop(2, 7, TEAM.WHITE, this));
         this.pieces[TEAM.WHITE].push(new Bishop(5, 7, TEAM.WHITE, this));
-        for (var i = 0; i < 8; i++) {
-            this.pieces[TEAM.WHITE].push(new Pawn(i, 6, TEAM.WHITE, this));
-        }
+        
     }
 
     countPossibleMovements(team) {

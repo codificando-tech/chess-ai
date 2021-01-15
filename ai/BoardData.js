@@ -33,17 +33,22 @@ class BoardData {
 
                 if(piece instanceof King) {
                     if (piece.didCastling) {
-                        teamScore[team] -= 5;
+                        teamScore[team] -= 1;
                     } else if (piece.firstMovement == false) {
-                        teamScore[team] += 5;
+                        teamScore[team] += 1;
+                    }
+
+                    if (piece.isInCheck && this.countPossibleMovements(team) == 0) {
+                        teamScore[team] += piece.value;
                     }
                 }
             });
         })
 
+
         score -= teamScore[TEAM.WHITE];
         score += teamScore[TEAM.BLACK];
-
+        
         this.score = score;
     }
 
@@ -59,6 +64,33 @@ class BoardData {
         piece.matrixPosition = createVector(destination.x, destination.y);
         piece.firstMovement = false;
         this.lastMove = {origin: origin, destination: destination};
+        this.handleKingCheck(board)
+    }
+
+    handleKingCheck(board) {
+        Object.values(TEAM).forEach(team => {
+            let king = board.getKing(team);
+            if(board.isInCheck(king)){
+                king.isInCheck = true;
+            } else {
+                king.isInCheck = false;
+            }
+        });
+    }
+
+    countPossibleMovements(team) {
+        let countMoves = 0;
+        let pieces;
+        let board = new Board();
+        this.mapperToBoard(board);
+
+        pieces = this.pieces[team].filter(piece => {if (!piece.taken) return true})
+
+        pieces.forEach(piece => {
+            countMoves += piece.generateMoves(board).length;
+        });
+
+        return countMoves;
     }
 
     clone() {

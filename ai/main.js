@@ -22,6 +22,7 @@ async function handleBoard(board) {
         } else if (board.turn == TEAM.WHITE) {
             bestBoardData = minimaxFunAB(boardData, isMax=true, -Infinity, +Infinity, depthLevel);
         }
+        
         board.getPieceAt(bestBoardData.lastMove.origin.x, bestBoardData.lastMove.origin.y).move(bestBoardData.lastMove.destination.x, bestBoardData.lastMove.destination.y, board)
     }
 }
@@ -51,6 +52,7 @@ function generateBoardsData(boardData) {
             newBoardData = boardData.clone();
             newBoardData.mapperToBoard(virtualBoard);
             newBoardData.movePiece(piece.origin, destination, virtualBoard);
+            newBoardData.mapperBoard(virtualBoard)
             newBoardData.turn = virtualBoard.getEnemyTeam(newBoardData.turn);
             boardsData.push(newBoardData);
         });
