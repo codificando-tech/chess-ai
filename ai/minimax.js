@@ -45,18 +45,24 @@ function minimaxFunAB(boardData, isMax, alpha, beta, depth) {
         boardData.setScore();
         return boardData;
     }
-    let boardsData = generateBoardsData(boardData);
+    
     let bestBoardData;
     let boardDataEval;
     let targetFunction;
     let targetScore;
+    let boardsData = generateBoardsData(boardData);
+
+    if (boardsData.length === 0) {
+        boardData.setScore();
+        return boardData;
+    } 
 
     if (isMax) {
         targetFunction = biggerThan;
         targetScore = -Infinity;
     } else {
         targetFunction = lessThan;
-        targetScore = +Infinity;
+        targetScore = Infinity;
     }
         
     for(let i = 0; i < boardsData.length; i++) {
@@ -67,12 +73,6 @@ function minimaxFunAB(boardData, isMax, alpha, beta, depth) {
             bestBoardData = boardsData[i];
             bestBoardData.score = boardDataEval.score;
 
-        } else {
-            if (boardDataEval.score == targetScore && (Math.floor(Math.random() * 10) < 2)) {
-                // 20% chance to choose random move when score is equal to targetScore
-                bestBoardData = boardsData[i];
-                bestBoardData.score = boardDataEval.score;
-            }
         }
 
         if (isMax) {
